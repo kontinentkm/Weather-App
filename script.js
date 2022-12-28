@@ -47,8 +47,7 @@ function getWeather() {
 		buildCurrentDay(data[0]);
 		buildForecast(data[1]);
 		localStorageWork(data[0]);
-		buildSearchList(data[0]);
-
+		buildSearchList();
 	})
 	.catch(() => {
 		alert('City not found');
@@ -65,7 +64,7 @@ function localStorageWork(objectCity) {
 	localStorage.setItem('searchListArray', JSON.stringify(searchListArray));
 }
 
-function buildSearchList(objectCity) {
+function buildSearchList() {
 	const searchListArrayFromLocalStorage = JSON.parse(localStorage.getItem('searchListArray'));
 	searchListArrayFromLocalStorage.forEach((data, index) => {
 		const searchListItem = new createElement('div', ['search-list-item', 'text-bg-primary', 'rounded', 'p-3', 'mt-3', 'me-2']).appendTo(searchList);
@@ -83,6 +82,15 @@ function buildSearchList(objectCity) {
 			searchListItem.remove();
 			localStorage.setItem('searchListArray', JSON.stringify(searchListArray));
 		});
+
+		searchListItem.addEventListener('click', (event) => {
+			event.preventDefault();
+			if (event.target !== buttonX) {
+				city = data.name;
+				getWeather();
+			}
+		});
+
 	})
 }
 
