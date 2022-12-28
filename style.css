@@ -1,0 +1,23 @@
+body {
+	background-image: url(img/clouds.jpg);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;  
+}
+
+.search-block	{
+height: 300px;
+}
+
+/* .weather-block {
+	background-color: antiquewhite;
+} */
+
+.search-list {
+	overflow: auto;
+}
+
+.search-list-item {
+	min-width: 150px;
+}
