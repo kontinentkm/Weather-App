@@ -1,71 +1,3 @@
-const searchForm = document.querySelector('form');
-const searchInp = searchForm.querySelector('[type="search"]');
-const searchList = document.querySelector('.search-list');
-const weatherBlocks = document.querySelector('.weather-blocks');
-const currentDayTitle = document.querySelector('.current-day-title');
-const currentDay = document.querySelector('.current-day');
-const forecastTitle = document.querySelector('.forecast-title');
-const forecast = document.querySelector('.forecast');
-let city = ''
-let searchListArray = [];
-if (JSON.parse(localStorage.getItem('searchListArray'))) {searchListArray = JSON.parse(localStorage.getItem('searchListArray'))};
-
-
-searchForm.addEventListener('submit', (event) => {
-	event.preventDefault();
-	searchFunction(searchInp.value);
-});
-
-function searchFunction(cityFromSearch) {
-	const value = cityFromSearch;
-	if(!value) return false;
-	city = value;
-	getWeather();
-	searchInp.value = '';
-};
-
-function clearBlock(data) {
-	currentDayTitle.innerHTML = '';
-	currentDay.innerHTML = '';
-	forecastTitle.innerHTML = '';
-	forecast.innerHTML = '';
-	searchList.innerHTML = '';
-}
-
-function getWeather() {
-	Promise.all([
-		fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=4d99368c58b7cf902223902d21f3f86f`)
-		.then(data => {
-			return data.json()
-		}),
-		fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=4d99368c58b7cf902223902d21f3f86f`)
-		.then(data => {
-			return data.json()
-		})
-		])
-	.then((data) => {
-		console.log(data)
-		if (data[0].cod !== '404') {clearBlock()}
-		buildCurrentDay(data[0]);
-		buildForecast(data[1]);
-		localStorageWork(data[0]);
-		buildSearchList();
-	})
-	.catch(() => {
-		alert('City not found');
-		city = '';
-		searchInp.value = '';
-	})
-};
-
-function localStorageWork(objectCity) {
-	searchListArray.unshift(objectCity);
-	if (searchListArray.length > 10) {
-		searchListArray.pop();
-	}
-	localStorage.setItem('searchListArray', JSON.stringify(searchListArray));
-}
-
 function buildSearchList() {
 	const searchListArrayFromLocalStorage = JSON.parse(localStorage.getItem('searchListArray'));
 	searchListArrayFromLocalStorage.forEach((data, index) => {
@@ -158,7 +90,7 @@ class createElement {
 	appendTo(parent) {
 	  	return parent.appendChild(this.element);
 	}
-	
+
 }
 
-buildSearchList();
+if (searchListArray) {buildSearchList()};
