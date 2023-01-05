@@ -7,7 +7,8 @@ const currentDay = document.querySelector('.current-day');
 const forecastTitle = document.querySelector('.forecast-title');
 const forecast = document.querySelector('.forecast');
 let city = ''
-let searchListArray = JSON.parse(localStorage.getItem('searchListArray'));
+let searchListArray = [];
+if (JSON.parse(localStorage.getItem('searchListArray'))) {searchListArray = JSON.parse(localStorage.getItem('searchListArray'))};
 
 
 searchForm.addEventListener('submit', (event) => {
@@ -43,6 +44,7 @@ function getWeather() {
 		})
 		])
 	.then((data) => {
+		console.log(data)
 		if (data[0].cod !== '404') {clearBlock()}
 		buildCurrentDay(data[0]);
 		buildForecast(data[1]);
